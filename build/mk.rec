@@ -1,0 +1,64 @@
+include $(PROJECT_PATH)/mk.build
+
+define make_config
+$(patsubst %=$1,-D%,$(filter %=$1,$(CONFIGS)))
+endef
+
+CONFIG_Y=$(call make_config,y)
+CONFIG_M=$(call make_config,m)
+CFLAGS+=$(CONFIG_Y) $(CONFIG_M)
+
+-include Ubuild
+
+PHONY+=build $(subdirs) $(build_subdirs)
+
+.SILENT:force
+
+define do_make
+$(MAKE) -C $(@:$1-%=%) -f $(PROJECT_PATH)/mk.rec $1
+endef
+
+y=$(filter %.o,$(obj-y)) $(obj-ut-y)
+m=$(filter %.o,$(obj-m)) $(obj-ut-m)
+objs=$(strip $(y) $(m))
+vsupps=$(strip $(filter %.supp,$(supp-y)))
+subdirs=$(strip $(filter-out %.o,$(obj-y) $(obj-m)))
+build_subdirs=$(subdirs:%=built-in.o-%)
+clean_subdirs=$(subdirs:%=clean-%)
+cleanall_subdirs=$(subdirs:%=cleanall-%)
+vsupp_subdirs=$(subdirs:%=vsupp-%)
+
+.SECONDEXPANSION:
+%.o:$$($$*-objs)
+	$(LD) -r $($*-objs) -o $@
+
+built-in.o:$(build_subdirs) $(objs)
+	$(if $(strip $(subdirs))$(strip $(objs)), \
+		$(LD) -r $(objs) $(subdirs:%=%/built-in.o) -o $@, \
+		$(AR) -rcs $@)
+
+clean:$(clean_subdirs)
+	rm -f *.o built-in.supp
+
+cleanall:$(cleanall_subdirs)
+	rm -f *.o built-in.supp
+	rm -f tags
+
+vsupp:$(vsupp_subdirs)
+	$(shell echo $(vsupps) $(foreach dir,$(subdirs),$(patsubst %,$(dir)/%,$(shell cat $(dir)/built-in.supp))) > built-in.supp)
+
+$(build_subdirs):force
+	$(call do_make,built-in.o)
+
+$(clean_subdirs):force
+	$(call do_make,clean)
+
+$(cleanall_subdirs):force
+	$(call do_make,cleanall)
+
+$(vsupp_subdirs):force
+	$(call do_make,vsupp)
+
+force:
+	true
+

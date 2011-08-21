@@ -1,0 +1,3 @@
+# Add build compilation ut sub-directories according to the configured modules:
+#
+# obj-$(CONFIG_<MODULE>) += <module>
