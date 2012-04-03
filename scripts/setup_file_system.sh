@@ -33,7 +33,7 @@ fi
 if [ ! -f $BINARIES_PATH/$MYFS_TAR_BZ2 ]; then
   PRINT "Getting $MYFS_DIR..."
   DO_QUITE_CD $BINARIES_PATH
-  wget http://mobilehost:8092/emmc/ti/omap4/pandaboard/rls-27.12.1-p2/$MYFS_TAR_BZ2
+  wget http://sys-mobilehost/emmc/ti/omap4/pandaboard/rls-27.12.1-p2/$MYFS_TAR_BZ2
   DO_QUITE_CD $SCRIPTS_PATH
 fi
 
