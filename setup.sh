@@ -10,15 +10,48 @@ EXEC_PATH=`echo $0 | sed 's/\(.*\)\/[^\/]*$/\1/'`
 cd 1>/dev/null $EXEC_PATH/scripts
 
 source scripts.env
-PRINT_KEY_VAL "SCRIPTS_PATH" $SCRIPTS_PATH
-PRINT_KEY_VAL "ENV_PATH" $ENV_PATH
-PRINT_KEY_VAL "BINARIES_PATH" $BINARIES_PATH
-PRINT_KEY_VAL "BINARIES_BCK_PATH" $BINARIES_BCK_PATH
-PRINT_KEY_VAL "BASE_PATH" $BASE_PATH
-PRINT_KEY_VAL "GIT_EMAIL_USER" $GIT_EMAIL_USER
+print_key_val "PROJECT_PATH" $PROJECT_PATH
+print_key_val "ENV_PATH" $ENV_PATH
+print_key_val "ANDROID_PATH" $ANDROID_PATH
+print_key_val "SCRIPTS_PATH" $SCRIPTS_PATH
+print_key_val "PATCHES_PATH" $PATCHES_PATH
+print_key_val "BINARIES_PATH" $BINARIES_PATH
+print_key_val "BINARIES_BCK_PATH" $BINARIES_BCK_PATH
+print_key_val "GIT_EMAIL_USER" $GIT_EMAIL_USER
+print_key_val "TOOLCHAIN_PATH" $TOOLCHAIN_PATH
+print_key_val "GIT_DEV_BRANCH" $GIT_DEV_BRANCH
 
-# setup file system
-exec ./setup_file_system.sh
+exec_script()
+{
+  if [ $# -eq 2 ]; then
+    if [ "$2" -eq 0 ]; then
+      PRINTLN "Skipping $1..."
+      return 0
+    fi
+  fi
+
+  ./$1
+  if [ $? -eq 0 ]; then
+    PRINTLN "Done!"
+  else
+    PRINTLN "Skipped..."
+  fi
+}
+
+# get root passowrd
+get_root_password
+
+# get prerequisite software
+exec_script get_prerequisite_software.sh
+
+# get toolchain
+exec_script get_toolchain.sh
+
+# setup android system
+exec_script setup_android_system.sh
+
+# setup mobilehost gpg public key
+exec_script setup_gpg_public_key.sh
 
 # cd to execution direcory
 cd 1>/dev/null $CUR_DIR

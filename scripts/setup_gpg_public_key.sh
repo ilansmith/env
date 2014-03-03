@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [ ! -f scripts.env ]; then
+  echo "Error: setup_gpg_public_key.sh must be executed inside the scripts directory."
+  exit 1
+fi
+
+source scripts.env
+
+PRINTLN "Setting up GPG public key..."
+
+echo "-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+
+mQENBE7Tl2sBCACnR+7EWtuc/PYHvVUerY7okUPAU1BSHz4vQQoEfepfONk+McR8
+FMMdMspZOr/rgmidlEtr3jQ/JaseS6vRol34Z1uvpvGvOsGQOqsAhNf+2AT/sDLv
+PtMoaadxQgL/oNP3ZDqzef60vY8Q6QE6bnDqlZ8LGgfhb1bLMVZa89Et4oT+6+es
+u3Sv4O7AI9bzhfDIGUTebU/5G0SFEOWyhisPpmaTSfww4tCN7BItLOSjQRUdI2KT
+vdExOrYq15mJhEZi2pg3wLlfCb3K3bip8Cj5Z8p4UG0/G/h7n0V5YF3lrI/2+e1k
+HfBd0WhRpu01ye1s5dVf6cP0vKfQv5dYdBppABEBAAG0PklsYW4gU21pdGggKE1v
+YmlsZWhvc3QgQWRtaW5pc3RyYXRvcikgPGlsYW4uc21pdGhAc2FuZGlzay5jb20+
+iQE4BBMBAgAiBQJO05drAhsDBgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRCJ
+G7BxGRmCKdnTB/4zi1PmIKGf8NsKeMOu3g8aqw6PBramNyFGEUtI/iBd1qPsieM/
+yzMMhrIBRWuqQCRWw7M2RvyZJoyC8S09gGMr/z6THBU/CHWYeF1B0iaq07RsXAI0
+w5282P7pNzlgntAkJNVjHVeYcAsoVxFPIhW/32Y8yviA8v9HWdHpQHIdkuCqY0GB
+dmRuSlvJvNeuoHlfMMVT6uDvOfIN9XacV9nq3nFTRmBl6uYz2Oe29HO5mVz7jzpG
+cmEGyF6A3KLV3kHnhjNNsbMI5nvSWMYrHtpUd912Lm7VUS+Jp0ZehLDOJERUAukH
+DDCWKZ3fUvIjYb4mW8HKOzkebaRWbuZSN8LZuQENBE7Tl2sBCADE+vUdvXuWfM5F
+Rs9bqN/siAdyayPIFbcV/0j9i+EZiLt+lsKd9+CWf3+GDOnDxAepxdQe/AjbAZ5Q
+zmGZdUlKr+at0fkuXRhsikX+AiyqoFBA4yvUp7MXJgqmF+jUTKyjN/hTTiKnGEeg
+KS9WcKcGfIzos7CjoeFS7ZngyIkuuqO1UGgvY100LVo+1q3aey4RAywh1tNciHdY
+ZIYu1R25qQcQTCKefDeXATQjoxWQibMhFAVkyFF14DOR2UJEUx3ga6y6iElGIs8B
+ZFrvTB5vXdKUGj3wFPMc8D1MnbPbRZi7/DPHyD+oj+3vlk/Up6uAiKYtDCp+zu6v
+8STkmdn/ABEBAAGJAR8EGAECAAkFAk7Tl2sCGwwACgkQiRuwcRkZgimhBwf+LrFg
+TkLLMGaswi3H/GrfLJ554E+aunRWxsrs0vLANGSgX9vS2YtWcps+gPCJWhDZS3Zr
+Zp7X90OlVuJG7b0q0mPGFxp3Pw/o2rWoINzrswL0daMp/IZ099r6aEdFfWlzg0a1
++v4hQeJstV8W6pKTpgKuOMBdaV5F2dsOpv8e8LDZQsQvEBjRt3kLPBbG4IRsVrom
+yUio/LuL3HXLHEbxiRPncXtXzojUYw3ujpt/U4/KyWBdmnR9PVLeUbgudnhk/JDX
+3JQqqtIAHc3ZPoYZfD6+rp13QGKEO9ibYQobE324PixFEDLNisRwFa7TEcOEjwmW
+WV/yXV+wtL/Qs6Zf7Q==
+=YBNu
+-----END PGP PUBLIC KEY BLOCK-----" | gpg --import
+
