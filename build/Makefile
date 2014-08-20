@@ -5,7 +5,7 @@ LOG_PATH:=$(PROJECT_PATH)/log
 KERNEL_PATH:=$(PROJECT_PATH)/kernel/
 U_BOOT_PATH:=$(PROJECT_PATH)/u-boot/
 IMG_PATH=$(PROJECT_PATH)/img
-TOOLCHAIN_PATH=/usr/local/sandisk/toolchain/arm-2010q1/bin
+TOOLCHAIN_PATH=/usr/local/sandisk/toolchain/arm-eabi-4.6/bin
 USE_CCACHE:=1
 
 export PATH:=$(TOOLCHAIN_PATH):$(PATH)
@@ -29,7 +29,7 @@ DO_DISTCLEAN=
 DO_CONFIG=
 DO_BUILD=y
 
-DEFAULT_TARGETS=ker ubt
+DEFAULT_TARGETS=ker
 
 define space2comma
 `echo "$1" | sed -e 's/[ \t]\+/, /g'`
@@ -135,12 +135,12 @@ $(if $(DO_CONFIG),$(if $3,$(call do_make_single,$1,$3,$@_config),@echo "\033[1m$
 $(if $(DO_BUILD),$(call do_make_single,$1,$4,$@_build))
 endef
 
-COMMON_BUILD_FLAGS:=PATH=$(PATH) ARCH=arm CCACHE_DIR=$(PROJECT_PATH)/.ccache CROSS_COMPILE='$(shell which ccache) arm-none-linux-gnueabi-'
+COMMON_BUILD_FLAGS:=PATH=$(PATH) ARCH=arm CCACHE_DIR=$(PROJECT_PATH)/.ccache CROSS_COMPILE='$(shell which ccache) arm-eabi-'
 
 KER_COMMON_BUILD_FLAGS:=$(COMMON_BUILD_FLAGS) MORLA_MODULE_PATH=$(MORLA_MODULE_PATH) PWD=$(KERNEL_PATH)
 
 ker:
-	$(call do_make,$(KERNEL_PATH),$(KER_COMMON_BUILD_FLAGS) distclean,$(KER_COMMON_BUILD_FLAGS) odroidxu_android_defconfig,$(KER_COMMON_BUILD_FLAGS))
+	$(call do_make,$(KERNEL_PATH),$(KER_COMMON_BUILD_FLAGS) distclean,$(KER_COMMON_BUILD_FLAGS) odroidxu3_defconfig,$(KER_COMMON_BUILD_FLAGS))
 
 UBT_COMMON_BUILD_FLAGS:=$(COMMON_BUILD_FLAGS)
 
@@ -164,7 +164,7 @@ endef
 
 define flash_kernel
   @echo "Flashing kernel..."
-  $(call flash_internal,kernel,zImage,$1)
+  $(call flash_internal,kernel,zImage-dtb,$1)
 endef
 
 define flash_all
@@ -183,7 +183,7 @@ sd:
 	echo "Are you sure you want to overwrite $(DEV)? [y/N]..."; \
 	read do_sd; \
 	if [ "$$do_sd" = "y" ]; then \
-		sudo dd bs=1M if=$(IMG_PATH)/emmc_installer_fix_reset.img of=$(DEV); \
+		sudo dd bs=1M if=$(IMG_PATH)/sd2emmc_installer.img of=$(DEV); \
 		[ $$? -ne 0 ] && return; \
 		[ -b "$(DEV)" ] && eject $(DEV); \
 		sync; \

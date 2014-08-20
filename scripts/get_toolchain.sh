@@ -8,5 +8,5 @@ fi
 source scripts.env
 
 PRINTLN "Setting up toolchain..."
-setup_new_tar $TOOLCHAIN_PATH http://sys-mobilehost/toolchains/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+setup_new_tar $TOOLCHAIN_PATH http://sys-mobilehost/toolchains/arm-eabi-4.6.tar.bz2
 
