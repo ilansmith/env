@@ -47,13 +47,11 @@ help:
 	@printf "\n"
 	@printf "Where 'targets' is any combination of:\n"
 	@printf "\033[1mker\033[0m - kernel (Android kernel for Samsung Exynos platforms).\n"
-	@printf "\033[1mubt\033[0m - bootloader (u-boot for Samsung Exynos platforms).\n"
 	@printf "Specifying no targets is equivilent to specifying the targets: $(call space2comma,$(DEFAULT_TARGETS)).\n"
 	@printf "\n     or\n\n"
 	@printf "     $$ \033[1mmake flash PART=<partition>\033[0m         [flash images to fastboot partitions]\n"
 	@printf "\n"
 	@printf "Where 'partitions' is one of:\n"
-	@printf "\033[1mbootloader\033[0m - bootloader image.\n"
 	@printf "\033[1mkernel\033[0m     - kernel image.\n"
 	@printf "\033[1mall\033[0m        - all of the above images.\n"
 	@printf "Before flashing:\n"
@@ -157,20 +155,14 @@ define flash_internal
   fi
 endef
 
-define flash_bootloader
-  echo "Flashing bootloader..."
-  $(call flash_internal,bootloader,bootloader,$1)
-endef
-
 define flash_kernel
   @echo "Flashing kernel..."
   $(call flash_internal,kernel,zImage-dtb,$1)
 endef
 
 define flash_all
-  $(call flash_bootloader,0)
-  $(call flash_kernel,0)
 
+  $(call flash_kernel,0)
   @fastboot reboot;
 endef
 
