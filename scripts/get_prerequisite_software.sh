@@ -8,7 +8,7 @@ fi
 source scripts.env
 
 MISSING=""
-PACKAGES_RECOMMENDED_GENERIC="git"
+PACKAGES_RECOMMENDED_GENERIC="git valgrind"
 
 test_installed()
 {

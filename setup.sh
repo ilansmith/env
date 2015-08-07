@@ -60,6 +60,9 @@ fi
 # get prerequisite software
 exec_script get_prerequisite_software.sh
 
+# patch the kernel
+exec_script patch_kernel.sh 1
+
 # setup mobilehost gpg public key
 exec_script setup_gpg_public_key.sh
 

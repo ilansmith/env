@@ -1,0 +1,14 @@
+# Kernel features and their tests to be added to unit tests.
+#
+# Every feature should include an entry with the following definitions:
+# - $(eval $(call do_export, CONFIG_XXX, xxx))
+# where:
+# - CONFIG_XXX: Config for enabling the kernel feature
+# - xxx: The feature's ut directory
+
+define do_export
+export $(strip $1)=$(strip $2)
+DIRS+=$2
+include $(UNIT_TEST_PATH)/$(strip $2)/Kbuild
+endef
+
