@@ -1,3 +1,6 @@
 # sliding window
 obj-$(CONFIG_LIB_SLW)		+= slw
 
+# device tree
+obj-$(CONFIG_DEV_TREE)		+= dev_tree
+

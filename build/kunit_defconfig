@@ -7,4 +7,5 @@ CONFIG_KUT_FS=y
 
 # unit test configs
 CONFIG_LIB_SLW=y
+CONFIG_DEV_TREE=y
 
