@@ -9,7 +9,8 @@ export UNIT_TEST_PATH:=$(PROJECT_PATH)/ut
 export INCLUDES=$(PROJECT_PATH)/core \
 	$(patsubst %,$(KERNEL_PATH)/%, \
 		patches/include \
-		stubs/include)
+		emu/lnx/include \
+		emu/kut/include)
 
 include Kbuild
 
@@ -23,7 +24,7 @@ $(foreach d,$(DIRS), \
 	$(if $(obj-$d),$(eval $(call add_objs,$d,$(obj-$d)))) \
 	$(if $(obj-ut-$d),$(eval $(call add_objs,$d,$(obj-ut-$d)))))
 
-libkernel_path=kernel/stubs
+libkernel_path=kernel/emu
 libcore_path=core
 
 CFLAGS=-Werror -Wall -g $(INCLUDES:%=-I%)
