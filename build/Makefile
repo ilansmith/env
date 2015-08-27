@@ -12,6 +12,15 @@ export INCLUDES=$(PROJECT_PATH)/core \
 		emu/lnx/include \
 		emu/kut/include)
 
+# Linux kernel y configs which are required by the tested code
+LNX_CONFIGS_Y=CONFIG_DEBUG_FS
+
+# Kernel Unit Test y configs which are required by the testing code
+KUT_CONFIGS_Y=CONFIG_KUT_COLOURS \
+	      CONFIG_KUT_FS
+
+export CONFIGS_Y=$(LNX_CONFIGS_Y) $(KUT_CONFIGS_Y)
+
 include Kbuild
 
 LD=gcc
@@ -27,7 +36,10 @@ $(foreach d,$(DIRS), \
 libkernel_path=kernel/emu
 libcore_path=core
 
-CFLAGS=-Werror -Wall -g $(INCLUDES:%=-I%)
+CFLAGS=-Werror -Wall -g \
+       $(CONFIGS_Y:%=-D%=y) \
+       $(INCLUDES:%=-I%)
+
 LDFAGS=$(patsubst %,-L$(PROJECT_PATH)/%, \
        $(libkernel_path) \
        $(libcore_path))
