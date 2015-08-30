@@ -44,6 +44,13 @@ ut:
 $(APP): ut libcore libkernel
 	$(GCC) $(UNIT_TEST_PATH)/built-in.o $(LDFAGS) -lcore -lkernel -o $@
 
+valgrind: $(APP)
+	@valgrind \
+		--leak-check=full \
+		--show-leak-kinds=definite,indirect,possible,reachable \
+		--track-origins=yes \
+		./$(APP)
+
 clean:
 	$(MAKE) -C $(libkernel_path) clean
 	$(MAKE) -C $(libcore_path) clean
