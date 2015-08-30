@@ -38,6 +38,7 @@ help:
 	@printf "Where 'target' is one of:\n"
 	$(call help_print_tool,"$(APP)","build $(APP) [default target]")
 	$(call help_print_tool,"valgrind","run $(APP) with valgrind")
+	$(call help_print_tool,"cov","run coverity static analysis")
 	$(call help_print_tool,"clean","clean object files and libraries")
 	$(call help_print_tool,"cleanall","clean everything")
 
