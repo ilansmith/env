@@ -1,2 +1,3 @@
 slw/0001-lib-Added-sliding-window.patch
 dev_tree/0001-Created-dev_tree-debugfs-file-for-tracing-the-mmc-de.patch
+mmc_debugfs/0001-Added-mobilehost-debugfs-entries.patch

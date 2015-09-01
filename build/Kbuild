@@ -4,3 +4,6 @@ obj-$(CONFIG_LIB_SLW)		+= slw
 # device tree
 obj-$(CONFIG_DEV_TREE)		+= dev_tree
 
+# mmc debugfs 
+obj-$(CONFIG_DEBUG_FS)		+= mmc_debugfs
+
