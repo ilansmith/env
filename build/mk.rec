@@ -1,0 +1,56 @@
+include $(PROJECT_PATH)/mk.build
+
+define make_config
+$(patsubst %=$1,-D%,$(filter %=$1,$(CONFIGS)))
+endef
+
+CONFIG_Y=$(call make_config,y)
+CONFIG_M=$(call make_config,m)
+CFLAGS+=$(CONFIG_Y) $(CONFIG_M)
+
+-include Kbuild
+
+PHONY+=build $(subdirs) $(build_subdirs)
+
+.SILENT:force
+
+define do_make
+$(MAKE) -C $(@:$1-%=%) -f $(PROJECT_PATH)/mk.rec $2
+endef
+
+y=$(filter %.o,$(obj-y)) $(obj-ut-y)
+m=$(filter %.o,$(obj-m)) $(obj-ut-m)
+objs=$(strip $(y) $(m))
+subdirs=$(strip $(filter-out %.o,$(obj-y) $(obj-m)))
+build_subdirs=$(subdirs:%=build-%)
+clean_subdirs=$(subdirs:%=__clean-%)
+cleanall_subdirs=$(subdirs:%=__cleanall-%)
+
+.SECONDEXPANSION:
+%.o:$$($$*-objs)
+	$(LD) -r $($*-objs) -o $@
+
+built-in.o:$(build_subdirs) $(objs)
+	$(if $(strip $(subdirs))$(strip $(objs)), \
+		$(LD) -r $(objs) $(subdirs:%=%/built-in.o) -o $@, \
+		$(AR) -rcs $@)
+
+__clean:$(clean_subdirs)
+	rm -f *.o
+
+__cleanall:$(cleanall_subdirs)
+	rm -f *.o
+	rm -f tags
+
+$(build_subdirs):force
+	$(call do_make,build,built-in.o)
+
+$(clean_subdirs):force
+	$(call do_make,__clean,__clean)
+
+$(cleanall_subdirs):force
+	$(call do_make,__cleanall,__cleanall)
+
+force:
+	true
+

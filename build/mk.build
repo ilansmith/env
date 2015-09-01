@@ -1,0 +1,22 @@
+include $(PROJECT_PATH)/.config
+
+export CONFIGS_Y:=$(filter %=y %=m,$(shell cat $(PROJECT_PATH)/.config))
+
+CC=gcc
+LD=ld
+AR=ar
+GCC=gcc
+
+CFLAGS=-Werror -Wall -g $(INCLUDES:%=-I%) $(CONFIGS_Y:%=-D%)
+LDFAGS=$(patsubst %,-L$(PROJECT_PATH)/%, \
+       $(libkernel_path) \
+       $(libcore_path))
+
+.PHONY:$(PHONY)
+
+%.o: %.c
+	$(CC) -c $< $(CFLAGS) -o $@
+
+lib%:
+	$(MAKE) -C $($@_path)
+
