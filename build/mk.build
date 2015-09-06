@@ -8,7 +8,7 @@ AR=ar
 GCC=gcc
 
 CFLAGS=-Werror -Wall -g $(INCLUDES:%=-I%) $(CONFIGS_Y:%=-D%)
-LDFAGS=$(patsubst %,-L$(PROJECT_PATH)/%, \
+LDFLAGS=$(patsubst %,-L$(PROJECT_PATH)/%, \
        $(libkernel_path) \
        $(libcore_path))
 

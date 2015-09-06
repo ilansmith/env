@@ -46,7 +46,7 @@ ut:
 	$(MAKE) -C $(UNIT_TEST_PATH) $(BUILD_REC) built-in.o
 
 $(APP): ut libcore libkernel
-	$(GCC) $(UNIT_TEST_PATH)/built-in.o $(LDFAGS) -lcore -lkernel -o $@
+	$(GCC) $(UNIT_TEST_PATH)/built-in.o $(LDFLAGS) -lcore -lkernel -lm -o $@
 
 valgrind: $(APP)
 	@valgrind \
