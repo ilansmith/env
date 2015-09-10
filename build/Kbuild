@@ -7,3 +7,5 @@ obj-$(CONFIG_DEV_TREE)		+= dev_tree
 # mmc debugfs 
 obj-$(CONFIG_DEBUG_FS)		+= mmc_debugfs
 
+# ffu
+obj-$(CONFIG_MMC_FFU)		+= ffu
