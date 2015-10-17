@@ -4,6 +4,9 @@ export PROJECT_PATH:=$(shell cd $(dir $(THIS_MAKEFILE_PATH));pwd)
 export KERNEL_PATH:=$(PROJECT_PATH)/kernel
 export RUNTIME_PATH:=$(KERNEL_PATH)/runtime
 export UNIT_TEST_PATH:=$(PROJECT_PATH)/ut
+export COVERITY_PATH:=$(PROJECT_PATH)/.coverity
+export COVERITY_ANALYSIS_PATH:=$(COVERITY_PATH)/analysis
+export COVERITY_FORMATTING_PATH:=$(COVERITY_PATH)/formatting
 
 # kernel include paths
 export INCLUDES:=$(PROJECT_PATH)/core \
@@ -51,6 +54,16 @@ valgrind: $(APP)
 		--track-origins=yes \
 		./$(APP)
 
+cov:
+	@echo "executing cov-build..."; \
+		cov-build --dir $(COVERITY_ANALYSIS_PATH) make
+	@echo "executing cov-analyze..."; \
+		cov-analyze --dir $(COVERITY_ANALYSIS_PATH) --all
+	@echo "executing cov-format-errors..."; \
+		cov-format-errors --dir $(COVERITY_ANALYSIS_PATH) --html-output $(COVERITY_FORMATTING_PATH)
+	@echo "\ncreating link to analysis: coverity.html..."; \
+		ln -sf $(COVERITY_FORMATTING_PATH)/index.html coverity.html
+
 clean:
 	$(MAKE) -C $(libkernel_path) clean
 	$(MAKE) -C $(libcore_path) clean
@@ -60,6 +73,7 @@ cleanall:
 	$(MAKE) -C $(libkernel_path) cleanall
 	$(MAKE) -C $(libcore_path) cleanall
 	$(MAKE) -C $(UNIT_TEST_PATH) $(BUILD_REC) __cleanall
-	rm -f tags
+	rm -f tags coverity.html
+	rm -rf $(COVERITY_PATH)
 	rm -f $(APP)
 
