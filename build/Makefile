@@ -1,4 +1,4 @@
-export PROJECT_NAME:=<fill-in>
+export PROJECT_NAME:=unit-test
 export THIS_MAKEFILE_PATH:=$(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 export PROJECT_PATH:=$(shell cd $(dir $(THIS_MAKEFILE_PATH));pwd)
 export UNIT_TEST_PATH:=$(PROJECT_PATH)/ut
@@ -11,7 +11,7 @@ export INCLUDES:=$(PROJECT_PATH)/core
 
 PHONY+=clean cleanall ut vsupp
 
-APP:=<fill-in>
+APP:=utest
 BUILD_REC:=-f $(PROJECT_PATH)/mk.rec
 
 libcore_path:=core
