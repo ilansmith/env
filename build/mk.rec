@@ -8,7 +8,7 @@ CONFIG_Y=$(call make_config,y)
 CONFIG_M=$(call make_config,m)
 CFLAGS+=$(CONFIG_Y) $(CONFIG_M)
 
--include Ubuild
+-include Kbuild
 
 PHONY+=build $(subdirs) $(build_subdirs)
 

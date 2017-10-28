@@ -1,19 +1,26 @@
-export PROJECT_NAME:=<fill-in>
+export PROJECT_NAME:=kunit
 export THIS_MAKEFILE_PATH:=$(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 export PROJECT_PATH:=$(shell cd $(dir $(THIS_MAKEFILE_PATH));pwd)
+export KERNEL_PATH:=$(PROJECT_PATH)/kernel
+export RUNTIME_PATH:=$(KERNEL_PATH)/runtime
 export UNIT_TEST_PATH:=$(PROJECT_PATH)/ut
 export COVERITY_PATH:=$(PROJECT_PATH)/.coverity
 export COVERITY_ANALYSIS_PATH:=$(COVERITY_PATH)/analysis
 export COVERITY_FORMATTING_PATH:=$(COVERITY_PATH)/formatting
 
-# include paths
-export INCLUDES:=$(PROJECT_PATH)/core
+# kernel include paths
+export INCLUDES:=$(PROJECT_PATH)/core \
+	$(patsubst %,$(KERNEL_PATH)/%, \
+		patches/include \
+		emu/lnx/include \
+		emu/kut/include)
 
 PHONY+=clean cleanall ut vsupp
 
-APP:=<fill-in>
+APP:=kunit
 BUILD_REC:=-f $(PROJECT_PATH)/mk.rec
 
+libkernel_path:=kernel/emu
 libcore_path:=core
 
 all: $(APP)
@@ -38,8 +45,8 @@ help:
 ut:
 	$(MAKE) -C $(UNIT_TEST_PATH) $(BUILD_REC) built-in.o
 
-$(APP): ut libcore
-	$(GCC) $(UNIT_TEST_PATH)/built-in.o $(LDFLAGS) -lcore -lm -o $@
+$(APP): ut libcore libkernel
+	$(GCC) $(UNIT_TEST_PATH)/built-in.o $(LDFLAGS) -lcore -lkernel -lm -o $@
 
 vsupp:
 	$(MAKE) -C $(UNIT_TEST_PATH) $(BUILD_REC) vsupp
@@ -64,10 +71,12 @@ cov:
 		ln -sf $(COVERITY_FORMATTING_PATH)/index.html coverity.html
 
 clean:
+	$(MAKE) -C $(libkernel_path) clean
 	$(MAKE) -C $(libcore_path) clean
 	$(MAKE) -C $(UNIT_TEST_PATH) $(BUILD_REC) clean
 
 cleanall:
+	$(MAKE) -C $(libkernel_path) cleanall
 	$(MAKE) -C $(libcore_path) cleanall
 	$(MAKE) -C $(UNIT_TEST_PATH) $(BUILD_REC) cleanall
 	rm -f tags coverity.html

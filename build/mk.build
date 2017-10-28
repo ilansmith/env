@@ -9,6 +9,7 @@ GCC=gcc
 
 CFLAGS=-Werror -Wall -g $(INCLUDES:%=-I%) $(CONFIGS_Y:%=-D%)
 LDFLAGS=$(patsubst %,-L$(PROJECT_PATH)/%, \
+       $(libkernel_path) \
        $(libcore_path))
 
 .PHONY:$(PHONY)

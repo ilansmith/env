@@ -1,0 +1,7 @@
+# kernel configs
+CONFIG_DEBUG_FS=y
+
+# kunit configs
+CONFIG_KUT_COLOURS=y
+CONFIG_KUT_FS=y
+
