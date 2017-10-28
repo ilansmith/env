@@ -5,3 +5,6 @@
 # sliding window
 obj-$(CONFIG_SLW)		+= slw
 
+# session descriptor protocol
+obj-$(CONFIG_SDP)		+= sdp
+
