@@ -34,6 +34,9 @@ test_installed()
 		ubuntu)
 			echo `test_installed_ubuntu $1`
 			;;
+		linuxmint)
+			echo `test_installed_ubuntu $1`
+			;;
 		rhel)
 			echo ! `test_installed_rhel $1`
 			;;
