@@ -10,6 +10,7 @@ USE_CCACHE:=1
 
 export PATH:=$(TOOLCHAIN_PATH):$(PATH)
 export MORLA_MODULE_PATH=../../../dev/kernel/morla/morla-module/
+export MMC_DEV_TREE_PATH=../../../dev/kernel/dev_tree/
 
 .PHONY: sd flash
 
@@ -21,7 +22,7 @@ FLAG_DISTCLEAN:=distclean
 VALID_CONFIG_OPTS:=$(FLAG_CONFIG) $(FLAG_DISTCLEAN)
 
 # filter out invalid %=y flags (and anything else that is not of the form %=y)
-CMD_LINE_OPTS=$(strip $(patsubst %=y,%,$(MAKEFLAGS)))
+CMD_LINE_OPTS=$(strip $(filter-out --,$(patsubst %=y,%,$(MAKEFLAGS))))
 INVALID_OPTS=$(filter-out $(VALID_CONFIG_OPTS),$(CMD_LINE_OPTS))
 
 # default
@@ -121,7 +122,7 @@ define do_make_single
 endef
 
 define verify_valid_options
-$(if $(INVALID_OPTS)$,$(call do_error,Unrecognized make flags/options: $(INVALID_OPTS)))
+$(if $(INVALID_OPTS),$(call do_error,Unrecognized make flags/options: $(INVALID_OPTS)))
 endef
 
 # usage: do_make <$1=path> <$2=distclean_target> <$3=config_target> <$4=build_target>
@@ -135,7 +136,7 @@ endef
 
 COMMON_BUILD_FLAGS:=PATH=$(PATH) ARCH=arm CCACHE_DIR=$(PROJECT_PATH)/.ccache CROSS_COMPILE='$(shell which ccache) arm-eabi-'
 
-KER_COMMON_BUILD_FLAGS:=$(COMMON_BUILD_FLAGS) MORLA_MODULE_PATH=$(MORLA_MODULE_PATH) PWD=$(KERNEL_PATH)
+KER_COMMON_BUILD_FLAGS:=$(COMMON_BUILD_FLAGS) MMC_DEV_TREE_PATH=$(MMC_DEV_TREE_PATH) PWD=$(KERNEL_PATH)
 
 ker:
 	$(call do_make,$(KERNEL_PATH),$(KER_COMMON_BUILD_FLAGS) distclean,$(KER_COMMON_BUILD_FLAGS) odroidxu3_defconfig,$(KER_COMMON_BUILD_FLAGS))
