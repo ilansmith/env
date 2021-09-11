@@ -8,5 +8,6 @@ fi
 source scripts.env
 
 PRINTLN "Setting up toolchain..."
-setup_new_tar $TOOLCHAIN_PATH http://sys-mobilehost/toolchains/arm-eabi-4.6.tar.bz2
+# Available also on Ilan Smith's Google Drive
+setup_new_tar $TOOLCHAIN_PATH http://dn.odroid.com/ODROID-XU/compiler/arm-eabi-4.6.tar.gz
 
