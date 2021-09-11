@@ -47,8 +47,8 @@ exec_script get_prerequisite_software.sh
 # get toolchain
 exec_script get_toolchain.sh
 
-# setup android system
-exec_script setup_android_system.sh
+# populate extra stuff in build directory
+exec_script setup_build_dir.sh
 
 # setup mobilehost gpg public key
 exec_script setup_gpg_public_key.sh
